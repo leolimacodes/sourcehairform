@@ -46,9 +46,6 @@ npm install
 ### 5️⃣ **Configurar Variáveis de Ambiente**
 - Crie um arquivo `.env.production` com:
 ```env
-EMAIL_USER=leonardoeletr@gmail.com
-EMAIL_PASS=hrdp uknm mcoz dxon
-EMAIL_TO=leonardoeletr@gmail.com
 NODE_ENV=production
 ```
 
@@ -101,7 +98,6 @@ pm2 save
 - [ ] ✅ Aplicação iniciada (`npm start`)
 - [ ] ✅ Domínio apontando corretamente
 - [ ] ✅ Banco de dados funcionando
-- [ ] ✅ Emails sendo enviados
 
 ## 🆘 Problemas Comuns
 
@@ -115,10 +111,6 @@ pm2 save
 
 ### **Erro: "Port already in use"**
 - Mude a porta no `package.json` ou use a porta fornecida pela Hostinger
-
-### **Emails não funcionam****
-- Verifique se as variáveis de ambiente estão corretas
-- Teste com um serviço SMTP diferente se necessário
 
 ## 🎉 Sucesso!
 

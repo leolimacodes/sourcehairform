@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label"
 export default function SignupPage() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     password: "",
     confirmPassword: "",
   })
@@ -101,22 +100,6 @@ export default function SignupPage() {
                 type="text"
                 placeholder="Enter your full name"
                 value={formData.name}
-                onChange={handleChange}
-                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-[#e78a53] focus:ring-[#e78a53]/20"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">
-                Email
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
                 onChange={handleChange}
                 className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-[#e78a53] focus:ring-[#e78a53]/20"
                 required

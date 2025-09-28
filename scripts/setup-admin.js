@@ -20,7 +20,6 @@ async function setupAdmin() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           nomeCompleto TEXT NOT NULL,
           telefone TEXT NOT NULL,
-          email TEXT NOT NULL,
           instagram TEXT,
           linkedin TEXT,
           whatsapp TEXT,

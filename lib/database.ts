@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 import path from 'path';
 import fs from 'fs';
 
-// Configuração do banco de dados SQLite
+// Configuração do banco de dados
 export async function openDB() {
   const dbPath = path.join(process.cwd(), 'database.sqlite');
   
@@ -49,6 +49,7 @@ export interface AdminUser {
 // Inicializar banco de dados e criar tabelas
 export async function initializeDatabase() {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   // Tabela para formulários
   await db.exec(`
@@ -87,6 +88,7 @@ export async function initializeDatabase() {
 // Salvar ou atualizar progresso do formulário
 export async function saveFormProgress(formData: Partial<FormData>, sessionId?: string) {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     // Se temos um sessionId, tentamos atualizar o registro existente
@@ -152,6 +154,7 @@ export async function saveFormProgress(formData: Partial<FormData>, sessionId?: 
 // Buscar todos os formulários
 export async function getAllFormSubmissions() {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const submissions = await db.all(`
@@ -168,6 +171,7 @@ export async function getAllFormSubmissions() {
 // Buscar formulários por status
 export async function getFormSubmissionsByStatus(status: 'abandoned' | 'completed') {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const submissions = await db.all(`
@@ -185,6 +189,7 @@ export async function getFormSubmissionsByStatus(status: 'abandoned' | 'complete
 // Buscar estatísticas do dashboard
 export async function getDashboardStats() {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const totalSubmissions = await db.get('SELECT COUNT(*) as count FROM form_submissions');
@@ -220,6 +225,7 @@ export async function getDashboardStats() {
 // Buscar usuário admin por username
 export async function getAdminUser(username: string) {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const user = await db.get(
@@ -236,6 +242,7 @@ export async function getAdminUser(username: string) {
 // Criar usuário admin (apenas para setup inicial)
 export async function createAdminUser(username: string, hashedPassword: string) {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const result = await db.run(
@@ -252,6 +259,7 @@ export async function createAdminUser(username: string, hashedPassword: string) 
 // Atualizar status de análise de um formulário
 export async function updateAnalysisStatus(id: number, analysisStatus: 'selected' | 'discarded') {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     await db.run(
@@ -266,6 +274,7 @@ export async function updateAnalysisStatus(id: number, analysisStatus: 'selected
 // Excluir formulário
 export async function deleteFormSubmission(id: number) {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     await db.run('DELETE FROM form_submissions WHERE id = ?', [id]);
@@ -277,6 +286,7 @@ export async function deleteFormSubmission(id: number) {
 // Obter formulários por status de análise
 export async function getFormSubmissionsByAnalysisStatus(analysisStatus: 'pending' | 'selected' | 'discarded') {
   const db = await openDB();
+  if (!db) throw new Error('Banco SQLite não configurado');
   
   try {
     const submissions = await db.all(

@@ -35,8 +35,7 @@ interface DashboardStats {
 
 interface FormSubmission {
   id: number;
-  nome?: string;
-  email?: string;
+  nomeCompleto?: string;
   telefone?: string;
   instagram?: string;
   tiktok?: string;
@@ -88,12 +87,14 @@ export default function AdminPanel() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
+      console.log('Carregando dados do dashboard...');
       
       // Carregar estatísticas
       const statsResponse = await fetch('/api/admin/stats');
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         setStats(statsData);
+        console.log('Stats carregadas:', statsData);
       }
 
       // Carregar formulários completos
@@ -101,6 +102,7 @@ export default function AdminPanel() {
       if (completedResponse.ok) {
         const completedData = await completedResponse.json();
         setCompletedSubmissions(completedData);
+        console.log('Formulários completos carregados:', completedData.length);
       }
 
       // Carregar formulários abandonados
@@ -108,6 +110,7 @@ export default function AdminPanel() {
       if (abandonedResponse.ok) {
         const abandonedData = await abandonedResponse.json();
         setAbandonedSubmissions(abandonedData);
+        console.log('Formulários abandonados carregados:', abandonedData.length);
       }
 
       // Carregar candidatos selecionados
@@ -115,6 +118,7 @@ export default function AdminPanel() {
       if (selectedResponse.ok) {
         const selectedData = await selectedResponse.json();
         setSelectedSubmissions(selectedData);
+        console.log('Candidatos selecionados carregados:', selectedData.length);
       }
 
       // Carregar candidatos descartados
@@ -122,8 +126,12 @@ export default function AdminPanel() {
       if (discardedResponse.ok) {
         const discardedData = await discardedResponse.json();
         setDiscardedSubmissions(discardedData);
+        console.log('Candidatos descartados carregados:', discardedData.length);
       }
+      
+      console.log('Dados do dashboard carregados com sucesso');
     } catch (error) {
+      console.error('Erro ao carregar dados do painel:', error);
       setError('Erro ao carregar dados do painel');
     } finally {
       setLoading(false);
@@ -152,6 +160,8 @@ export default function AdminPanel() {
 
   const handleAnalysis = async (id: number, analysisStatus: 'selected' | 'discarded') => {
     try {
+      console.log('Enviando análise:', { id, analysisStatus });
+      
       const response = await fetch('/api/admin/analysis', {
         method: 'POST',
         headers: {
@@ -160,13 +170,61 @@ export default function AdminPanel() {
         body: JSON.stringify({ id, analysisStatus }),
       });
 
+      console.log('Resposta da API:', response.status, response.statusText);
+      
       if (response.ok) {
-        // Recarregar dados
-        loadDashboardData();
+        console.log('Análise atualizada com sucesso');
+        
+        // Encontrar o submission que está sendo movido
+        const submissionToMove = completedSubmissions.find(sub => sub.id === id);
+        console.log('Submission encontrado:', submissionToMove);
+        
+        if (submissionToMove) {
+          // Forçar atualização imediata do estado local
+          if (analysisStatus === 'selected') {
+            console.log('Movendo para selecionados');
+            // Remover da lista de completos
+            setCompletedSubmissions(prev => {
+              const updated = prev.filter(sub => sub.id !== id);
+              console.log('Completos após remoção:', updated.length);
+              return updated;
+            });
+            // Adicionar aos selecionados
+            setSelectedSubmissions(prev => {
+              // Remover se já existe para evitar duplicação, depois adicionar no topo
+              const filtered = prev.filter(sub => sub.id !== id);
+              const updated = [{ ...submissionToMove, analysisStatus: 'selected' }, ...filtered];
+              console.log('Selecionados após adição:', updated.length);
+              return updated;
+            });
+          } else if (analysisStatus === 'discarded') {
+            console.log('Movendo para descartados');
+            // Remover da lista de completos
+            setCompletedSubmissions(prev => {
+              const updated = prev.filter(sub => sub.id !== id);
+              console.log('Completos após remoção:', updated.length);
+              return updated;
+            });
+            // Adicionar aos descartados
+            setDiscardedSubmissions(prev => {
+              // Remover se já existe para evitar duplicação, depois adicionar no topo
+              const filtered = prev.filter(sub => sub.id !== id);
+              const updated = [{ ...submissionToMove, analysisStatus: 'discarded' }, ...filtered];
+              console.log('Descartados após adição:', updated.length);
+              return updated;
+            });
+          }
+        } else {
+          console.error('Submission não encontrado na lista de completos');
+        }
+        
       } else {
-        setError('Erro ao atualizar status de análise');
+        const errorData = await response.json();
+        console.error('Erro na resposta:', errorData);
+        setError('Erro ao atualizar status de análise: ' + (errorData.error || 'Erro desconhecido'));
       }
     } catch (error) {
+      console.error('Erro na requisição:', error);
       setError('Erro ao atualizar status de análise');
     }
   };
@@ -465,8 +523,7 @@ export default function AdminPanel() {
                           <CardContent className="p-6">
                             <div className="flex justify-between items-start">
                               <div className="space-y-2">
-                                <h3 className="font-semibold text-gray-900">{submission.nome}</h3>
-                                <p className="text-sm text-gray-600">{submission.email}</p>
+                                <h3 className="font-semibold text-gray-900">{submission.nomeCompleto}</h3>
                                 <p className="text-sm text-gray-600">{submission.telefone}</p>
                                 <Badge variant="secondary" className="bg-green-100 text-green-800">
                                   Selecionado
@@ -526,8 +583,7 @@ export default function AdminPanel() {
                           <CardContent className="p-6">
                             <div className="flex justify-between items-start">
                               <div className="space-y-2">
-                                <h3 className="font-semibold text-gray-900">{submission.nome}</h3>
-                                <p className="text-sm text-gray-600">{submission.email}</p>
+                                <h3 className="font-semibold text-gray-900">{submission.nomeCompleto}</h3>
                                 <p className="text-sm text-gray-600">{submission.telefone}</p>
                                 <Badge variant="secondary" className="bg-red-100 text-red-800">
                                   Descartado
@@ -674,8 +730,8 @@ export default function AdminPanel() {
 
           {/* Modal de Detalhes */}
           {selectedSubmission && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-900">Detalhes do Formulário</h2>

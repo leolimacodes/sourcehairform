@@ -45,7 +45,7 @@ Na tela de configuração, adicione:
 ```env
 NODE_ENV=production
 JWT_SECRET=seu_jwt_secret_super_seguro_aqui_123456789
-ADMIN_EMAIL=seu@email.com
+ADMIN_USERNAME=seu_usuario_admin
 ADMIN_PASSWORD=sua_senha_admin_segura
 ```
 

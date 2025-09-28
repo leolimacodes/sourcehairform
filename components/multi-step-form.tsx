@@ -106,27 +106,12 @@ export function MultiStepForm() {
       // Salvar como formulário concluído no banco de dados
       await saveProgress('completed')
       
-      // Enviar email com os dados do formulário (simulado)
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (!response.ok) {
-        throw new Error('Erro ao enviar email')
-      }
-
-      console.log('Email enviado com sucesso!')
-      
       // Mostrar tela de sucesso
       setShowSuccess(true)
       
     } catch (error) {
       console.error('Erro ao processar formulário:', error)
-      // Mesmo com erro no email, salvar como concluído e mostrar tela de sucesso
+      // Mesmo com erro, salvar como concluído e mostrar tela de sucesso
       await saveProgress('completed')
       setShowSuccess(true)
     } finally {
