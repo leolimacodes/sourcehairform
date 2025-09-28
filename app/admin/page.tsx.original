@@ -1,0 +1,153 @@
+'use client'
+
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
+export default function AdminPageStatic() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Painel Administrativo
+          </h1>
+          <p className="text-gray-600">
+            Versão estática - Para funcionalidade completa, use o servidor Node.js
+          </p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total de Formulários</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">-</div>
+              <p className="text-xs text-muted-foreground">
+                Dados não disponíveis na versão estática
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Formulários Completos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">-</div>
+              <p className="text-xs text-muted-foreground">
+                Dados não disponíveis na versão estática
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Taxa de Conversão</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">-%</div>
+              <p className="text-xs text-muted-foreground">
+                Dados não disponíveis na versão estática
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Formulários Abandonados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">-</div>
+              <p className="text-xs text-muted-foreground">
+                Dados não disponíveis na versão estática
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Notice */}
+        <Card className="mb-8 border-yellow-200 bg-yellow-50">
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
+              <div>
+                <h3 className="font-semibold text-yellow-800">Versão Estática</h3>
+                <p className="text-yellow-700 text-sm">
+                  Esta é uma versão estática do painel. Para funcionalidade completa com dados reais, 
+                  você precisa executar o servidor Node.js com as APIs.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tabs */}
+        <Tabs defaultValue="pending" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="pending">Pendentes</TabsTrigger>
+            <TabsTrigger value="selected">Selecionados</TabsTrigger>
+            <TabsTrigger value="discarded">Descartados</TabsTrigger>
+            <TabsTrigger value="abandoned">Abandonados</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="pending" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Formulários Pendentes de Análise</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-500 text-center py-8">
+                  Dados não disponíveis na versão estática
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="selected" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Candidatos Selecionados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-500 text-center py-8">
+                  Dados não disponíveis na versão estática
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="discarded" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Candidatos Descartados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-500 text-center py-8">
+                  Dados não disponíveis na versão estática
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="abandoned" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Formulários Abandonados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-500 text-center py-8">
+                  Dados não disponíveis na versão estática
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}
